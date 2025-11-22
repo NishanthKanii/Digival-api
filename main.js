@@ -96,6 +96,6 @@ app.get('/api/customers', async (req, res) => {
 });
 
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.info(`Server is running on port ${port}`);
 });
