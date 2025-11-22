@@ -1,0 +1,83 @@
+name: Deploy API
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: true
+
+      - name: Deploy to production
+        env:
+          PORT: ${{ secrets.PORT || '3000' }}
+        run: |
+          echo "Deployment would happen here"
+          echo "Configure your deployment target below:"
+          echo ""
+          echo "Examples:"
+          echo "- AWS: Use aws-cli to deploy to EC2/ECS/Lambda"
+          echo "- Heroku: Use heroku CLI or git push"
+          echo "- Railway: Use railway CLI"
+          echo "- Vercel: Use vercel CLI"
+          echo "- DigitalOcean: Use doctl CLI"
+          echo ""
+          echo "For now, this is a template. Replace this step with your actual deployment commands."
+
+      # Example: Deploy to Heroku (uncomment and configure)
+      # - name: Deploy to Heroku
+      #   uses: akhileshns/heroku-deploy@v3.13.15
+      #   with:
+      #     heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+      #     heroku_app_name: "your-app-name"
+      #     heroku_email: "your-email@example.com"
+
+      # Example: Deploy to AWS (uncomment and configure)
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+      #
+      # - name: Deploy to AWS
+      #   run: |
+      #     # Add your AWS deployment commands here
+      #     # Example: aws s3 sync . s3://your-bucket
+      #     # Example: aws ecs update-service --cluster your-cluster --service your-service
+
+      # Example: Deploy to Railway (uncomment and configure)
+      # - name: Deploy to Railway
+      #   uses: bervProject/railway-deploy@v1.0.0
+      #   with:
+      #     railway_token: ${{ secrets.RAILWAY_TOKEN }}
+      #     service: api
+
+      # Example: Deploy to Vercel (uncomment and configure)
+      # - name: Deploy to Vercel
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+
